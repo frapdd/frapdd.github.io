@@ -1,1 +1,436 @@
-prova
+< Introduction to Computer Security >
+
+The so-called CIA Paradigm for information security states the three basic requirements:
+• Confidentiality: information can be accessed only by authorized entities
+• Integrity: information can be modified only by authorized entities, and only in the way such entities are entitled to modify it
+• Availability: information must be available to all the parties who have a right to access it, within a
+specified time constraint.
+The problem is that “A” conflicts with “C” and “I”, so we have to find a trade-off (engineering problem) to build a secure system.
+
+Definitions: 
+• Vulnerability: a bug that allows to violate one of the constraints of the CIA paradigm. 
+• Exploit: a specific way to use one or more vulnerabilities to accomplish a specific objective that violates theconstraints.
+• Asset: identifies what is valuable for an entity of the system (remember: reputation and data)
+• Threat: potential violation of the system's CIA
+• Attack: an intentional use of exploits to compromise a system's CIA.
+• Threat agent: whoever/whatever may cause an attack to occur. 
+• Risk: an evaluation of the exposure to damage. Theoretically, Risk = Asset x Vulnerabilities x Threats. Remember: a system can "control" the assets and the vulnerabilities, but not the threats. 
+• Security: balancing the reduction of vulnerabilities considering the cost to accomplish that. 
+	Direct costs: 
+		> Money
+		> Operational 
+		> Equipment
+		> Management
+	Indirect costs: 
+		> Less usability
+		> Slower performance (can lead to reduced productivity)
+		> Less privacy (due to security controls)
+
+To deal with the architecture of secure systems, we will assume some parts of the system as secure (trusted element).
+
+< Introduction to Cryptography >
+
+Definitions: 
+• Cryptosystem: a system that takes in input a message (plaintext) and transforms it into a ciphertext with a reversible function that takes a "key" as a further input. 
+
+Kerchoff's principle: the security of a cryptosystem relies only on the secrecy of the key, and never on the secrecy of the algorithm. Algorithms must always be assumed known to the attacker. 
+
+Shannon introduced the concept of perfect cipher as one that leaks no secret at all to the attacker. P(M = m | C = c) = P(M = m)
+His theorem states that the number of keys must be >= to the number of possible messages. |K| >= |M|
+The proof starts by asserting that |C| >= |M| (cardinality of ciphertexts must be greater or equal than the messages')
+
+There is one example of perfect cipher: the "one time pad". It is a random string of the same size of the message. The key is pre-shared and consumed while writing, can never be re-used.
+It is a MINIMAL perfect cipher as |K| = |M|
+
+Every algorithm that is not a perfect cipher, leaks a small amount of information in the ciphertext-plaintext pair, as the key is re-used. 
+As the only unknown is the key, brute forcing is possible for any non-perfect cipher. 
+Anyway, a system is considered "broken" only if there is a way to break it that is fater than brute-force. In principle, there is no way to theoretically prove the robustness of a cipher. 
+Types of attack: 
+	_ Ciphertext-only: the attacker has access to the ciphertexts only
+	_ Known plaintext: the attacker has a set of pairs plain-encripted
+	_ Chosen plaintext: the attacker can use the system to produce examples
+
+< Symmetric Encryption >
+
+A single key is used to encrypt and decrypt the data, that needs to be transmitted on a secure channel (issue of scalability).
+Each symmetric algorithm is a mix of: 
+	_ Substitution: replace bytes. Issue: if the keyspace is too small, the ciphertext will leak information (visible structure)
+	_ Transposition: swapping values in the data. This can hide the structure in the data. 
+
+One of the main trade-off is between computational power and key lenght. 
+
+< Asymmetric Encryption >
+
+Eaach agent in the system has a public and a private key. The private cannot be retrieved from the public (and vice-versa). A messsage encrypted with the private one can be decripted only with the public one. 
+
+The trick used is a "trapdoor": a function that is easy to compute but difficult to invert.
+
+The basic assumption for this approach is that only the owner knows his private key, while everyone knows his public key. 
+
+With this paradigm, the public keys can be exchanged on an untrusted channel. 
+
+Note about comparison of algorithms: 
+	_ compare symmetric algorithms based on the key 		OK
+	_ directly compare asymmetric algorithms on the key 	NO
+	_ directly compare asymmetric and symmetric keys 		NO
+While in simmetric algorithms the key lenght is a measure of the number of decryption attemps needed, in asymmetric is the number of key-breaking attempts. 
+
+< Diffie-Hellman Exchange >
+
+This is an example of asymmetric algorithm, with the assumption that we only have an insecure channel and we need a secret code between two agents.
+The implementation require 4 numbers: 
+P - public, a prime number
+X - private key, a number between 1 and (p-1)
+A - public, a number such that A^f*mod p for every f between 1 and (p-1)  is a number between 1 and (p-1). This is called primitive root. 
+Y - public key = A^X mod p
+
+In this context, each pair of agents can compute a secret code common only to the two of them. 
+Secret = Y1^X2 mod p
+
+The trapdoor in this example is the modular algorithm, that makes very hard to go from the public to the private key. 
+
+< RSA algorithm > 
+
+Same context as the Diffie-Hellman exchange, but different implementation. The slides only report the trapdoor hint: given two large prime numbers, computing their product (N) is really easy, while infering them back from N is computationally demanding. You have to try all the primes until you get to the smaller between the two factors. 
+The brute force time of N is exponential in the number of bits of N, while the computation time of the ciphertext grows linearly with the number of bits. 
+
+< Hash > 
+
+A method to ensure integrity. 
+
+An hash function maps an aribitrary-lenght input in a fixed-lenght output. The codomain is smaller than the domain, so collisions are possible.  
+
+Such functions should resist to: 
+	> preimage attack: given the hash, find the input
+	> second preimage attack: given an input (and consequently its hash), find a different input with the same hash
+	> collision resistance: find two different inputs such that they collide
+A function is considered vulnerable to any of these if the attack can be performed faster than brute-forcing. 
+In the first two cases, the attacker can find a collision trying 2^n different inputs, while in the third one 2^n/2 due to the birthday paradox. 
+
+< Digital Signature >
+
+Is a method to ensure authentication. 
+
+The core idea is an authentication based on an asymmetric encryption, with a focus on the exchange of public keys to bind identities to public keys. The trusted element of the system is the CA, which "digitally signs" certificates to recognize some subjects in the system. 
+The files specifying the identity/public-key relationship are encrypted with the private key of the CA (here is a trusted element: we assume that such key is known only to the authority). 
+the top-level CA uses a self-signed certificate, it's a trusted element. 
+
+Another architecture based on the concept of digital signature is the "Web Of Trust", in which the certificates are signed by other agents in the network that know the subject to identify. 
+
+Certificates may be revoked, in this case, they are inserted in Certificate Revocation Lists (CRL).
+
+Each digital signature has to pass a verification sequence:
+A receiver gets: an hash, a document, a public key, a certificate
+1) hash verification: does the signature validate the document?
+2) is the public key the one on the certificate?
+3) is the certificate the one of the sender?
+4) is the certificate validated by the CA?
+5) is the root certificate trusted?
+6) is the certificate in a CRL? This last passage can't be done offline.
+
+< Authentication > 
+
+Definitions:
+• Identification: an entity declares its identity.
+• Authentication: an entity provides a proof that verifies its identity. Can be unidirectional or mutual. 
+
+The 3 factors of authentication are:
+1) something that you KNOW
+	low cost, low complexity, easy to use
+	the problem is that secrets can leak in many ways, and the countermeasures affect usability (complexity and periodical change policy). 
+	about the storage of passwords: never store them in clear + use salt/pepper. Define adequate privileges to the password file and never disclose secrets in password recovery schemes. 
+2) something that you HAVE
+	more secure, and low cost
+	the problem is the complexity and the fact that objects can get lost. there's no real countermeasure to cope with that. 
+	for critical systems, the tokens (that contain a private key) must be tamper proof to some extent.
+	the exhange between host and client (who has to authenticate) is based on a challenge-response schema.
+3) something that you ARE
+	this is the most secure factor and requries no effort by the human
+	there are however many disadvantages: complexity, privacy, non determinism in match, the change over time of biometric features.
+	there are no effective countermeasures other than the obvious ones. 
+
+There's an extra factor, the "social one". Agents must prove that she knows someone already in the system.
+
+The single sign-on strategy assumes an host H as "trusted". The user authenticate on H. When needed, H guarantees to all other (untrusted) hosts that the user is authenticated. 
+The complexity of the implementation is high, and the single point of trust is critical. 
+
+< Secure Password Exhange (something that you KNOW) >
+
+The authentication is based on the fact that the 2 entities share a secret. The goal is to verify the secret without having it stolen.
+Here's how mutual authentication works: 
+a - i am A, let me authenticate
+b - compute hash of the secret + this random data D1
+a - here's the hash, now you compute the hash of D1, the secret and also this other random data D2
+b - here's the hash
+
+< Access Control >
+
+The access control policies are implemented in a "reference monitor", that is a part of the kernel. This monitor is the trusted element of the access control system, so it must be tamper proof, not bypassable and robust. 
+When requesting an object to the system, the user has to authenticate to generate a valid "access request" to submit to the reference monitor. 
+
+There are 3 different models of access control: 
+	> Discretionary (DAC): The owner of the resource decides its privileges. 
+
+	Two common implementations are "Access Control Lists" (for each object, the list of subject and authorizations is stored) and "Capability lists" (for each subject, the list of objects and relative authorizations is stored). 
+
+	The main shortcomings of DAC are that safety cannot be strictly proved, the granularity of control is only at object-level (trojan horse) and the management complexity (low scalability).
+
+	> Mandatory (MAC): the privileges are set by a security administrator that defines a classification (a partial order relationship) of subjects ("clearance") and objects ("sensitivity"). 
+
+	A set of labels as well a strict order of secrecy levels define the "lattice" of the system. In this space, the partial order relationship is: 
+	{Label1, Level1} >= {Label2, Level2} <--> Level1 >= Level2 && Label1 is a subset of Label2
+	This is a reflexive, transitive and antisymmetric property. 
+
+	> Role-based (RBAC): hybrid between the other 2. 
+
+< HRU model (MAC) >
+
+The access control system can be represented with the "protection state": a matrix with S (subjects) rows and O (objects) columns, in each cell A[o,s] are listed the allowed actions. This representation is known as "HRU model", and the changes to the state are "transitions". 
+The robustness of the model (the safety problem) with respect to a right R can be formalized as: Given an initial protection state and set of transitions, is there any sequence of transitions that leaks R into the access matrix? This is decidable only if the subjects and objects are finite.
+
+< BLP (DAC) >
+
+Based on 2 MAC rules: 
+1) A subject s at a given secrecy level cannot read an object at a higher secrecy level.
+2) A subject s at a given secrecy level cannot write an object at a lower secrecy level. 
+
+The result of the system is a monotonic flow of information toward higher secrecy levels. Someone from below can send infromation to higher levels, but the information can never go to lower levels. 
+
+The tranquility principle of the Bell–LaPadula model states that the classification of a subject or object does not change while it is being referenced.
+
+< Network Recap >
+
+ISO/OSI layers: 
+[...]
+Transport
+Network
+Data-Link
+[...]
+
+Possible attacks target: availability, confidentiality, integrity, autenticity. 
+
+Definitions:
+• MAC address: the identifier of the data-link layer (below network layer in the ISO OSI).
+• ARP protocol: maps IP addresses to MAC addresses. Example:
+	Request: "where is 192.168.0.1?"
+	Reply: "192.168.0.1 is at b4:e9:b0:c9:81:03"
+• Port: identifier of the transport layer (above the network layer in the ISO OSI).
+• UDP: minimal transport layer protocol, a wrapper around the network packet with a port.
+• TCP: connection-oriented transport layer protocol. 
+• DoS attack: against AVAILABILITY. Make service unavailable to legitimate users. 
+• Sniffing attack: against CONFIDENTIALITY. Illegal reading of packets. At network level, cards can be set to promiscuos mode to send to the OS any packet read off of the wire. This kind of attack is a problem especially in hub-based networks, where the hubs broadcast traffic to every host. 
+• Spoofing attack: against INTEGRITY and AUTHENTICITY. Creation of malicious packets. 
+• ICMP: network layer protocol, auxiliary to IP. It's needed for debugging and error informations. 
+• Three Way Handshake: the TCP/IP standard initialization of a communication between 2 entities. 
+	1) A sends SYN packet to B
+	2) B sends SYN-ACK packet to A
+	3) A sends ACK to B
+• Distributed DoS (DDoS): A single attacker control a botnet and with a command ("C&C": Command and Control) can make many requests in parallel. In this case the multiplier is the botnet, an external factor --> no possible server-side mitigation. 
+• Amplification attack: the attacker exploits the protocols with a weak verification of the identity (spoofed ip) that send responses much bigger than the requests. The volume of data that the attacker has to send is much lighter than the data the victim will receivde. A possible mitigation is blocking the ports of such protocols (if possible).
+• CAM table: in a network switch, is the cache that stores which mac addresses are on which port. 
+• DNS: distributed naming system to translate domain names in numerical IP addresses. Based on UDP, without authentication. Works as a hierarchy of servers. Each server can be authoritative (responsible for the requested name) or not. 
+• DHCP: Protocol that dynamically assigns IP addresses
+(and network parameters) to each new device in a network.
+Based on UDP and not authenticated. Moreover, it must run continually. 
+	[ everything with dest: broadcast ]
+	Client: DHCP discover 
+	Server: DHCP offer
+	Client: DHCP request
+	Server: DHCP ack
+	(...)
+	Client: DHCP release
+
+< Ping of Death (DoS) >
+
+Exploit a memory error: sending an ICMP echo request bigger than the max size to crash the system.
+
+< Teardrop (DoS) >
+
+At transport layer, big payloads are fragmented in many small TCP packets, including the info for the reassembly in the header. Setting overlapping offsets, the kernel will crash. 
+
+< Land attack (DoS) >
+
+The attacker sends a TCP SYN spoofed packet where source, destination IPs and ports are set to be identical. When the target machine tries to reply, it enters a loop, repeatedly sending replies to itself which eventually causes the victim machine to crash.
+
+< Flooding (DoS) >
+
+The attacker sends multiple forged/spoofed requests to a target server and eventually saturate it. This kind of attack is always possible as every service has limited resources.  
+
+The 3 way handshake can be exploited with this kind of attack, the attacker will start the procedure many times (with spoofed source address) but never send the final ack (step 3), so the queue of the server will saturate. In this case, the multiplier factor is the server memory. After the saturation, legitimate users won't be able to perform the handshake. 
+A possible mitigation is dropping the stored packets after a while, but this is not really effective if the attacker will never stop flooding. 
+
+< Smurf (DDoS) >
+
+The attacker steals a fake identity and sends a ping request from everyone in the network (using a broadcast address).
+The multiplier is the number of hsts in the network handled by the router. 
+In modern routers, ICMP requests coming from the external are no more allowed, but if the attacker is in the same network of the victim the attack is still possible. 
+
+< ARP spoofing >
+
+Exploit the lack of authentication, the first reply to each request is trusted and cached in each host. 
+A possible mitigation may be the check of conflicts in responses before trusting or adding a seq number to the request to make it harder for the attack (that in this case needs to sniff the number before performing the attack).
+
+This attack work well in hub-based networks where the messages are broadcasted, in switch-based the attacker needs to fill the CAM table, forcing the switch to behave like an hub sending everything in broadcast.  
+
+< IP spoofing >
+
+On UDP, the source address is not authenticated, so the attacker can easily change it in the packets. To see the answers from the receiver, the attacker needs to sniff the rest or use ARP spoofing. 
+
+With TCP is much harder as the protocol uses semi-random sequence numbers for acknowledging packets in the 3-way handshake. The initial one is known as ISN. 
+	A: SYN , x
+	B: SYN-ACK, x+1, y
+	A: ACK, x+1, y+1
+If an attacker (blind spoofer) can predict the receiver's number (y), then it can complete the handshake without receiving the SYN-ACK. 
+However, the attacker needs to prevent (DoS attack) the victim from receiving the server's messages, as it might answer with a RST message. 
+A successful attack with TCP is known as "session hijack". The attacker can continue the session with the spoofed source ip address.
+
+< Man In The Middle > 
+
+An attack in which the attacker impersonates the server wrt the client and vice-versa. 
+Categories: 
+	_ physical / logical 
+	_ half duplex (send requests but don't see the response) / full duplex (control both in and out)
+
+< DNS Poisoning >
+
+For the domains for which a server is not authorative, caches are used. The non-authorative DNS server makes a recursive query to the authorative one, which is impersonated by the attacker. 
+By guessing the query ID (weak point of the process), the attacker spoofs the answer hoping that the victim DNS will trust it and cache it. This attack will affect all the clients that will connect to the poisoned DNS server. 
+
+< DHCP Poisoning > 
+
+The attacker can impersonate the DHCP server and answer first to the the client. By doing this, he can set the ip address, DNS addresses and default gateway of the victim client. 
+
+< ICMP Redirect >
+
+ICMP packets are also used to tell an host that a better route exists for a given destination, giving the gateway of that route. 
+The attacker can forge a spoofed ICMP redirect packet to re-route traffic on a malicious route (electing the attacker's computer as the gateway).
+To create the fake packet, the attacker must steal the session between the host and the router, creating an half-duplex MITM situation.
+
+< Secure Network Architectures > 
+
+Definitions: 
+• NAT: IP address translation between internal and external networks. It's mainly used over TCP and also the ISN is masked. For every connection, a slot to store the translation info is required. 
+When used over UDP, we simulate a session by expecting a response for every request, setting a timeout. 
+• FTP: typical start of session: 
+	Client on port P0 --> Server on port 21: client's ip + dynamic port P1
+	Server on 21 --> Client on P0: dynamic port OK
+	Server on 20 --> Client on P1: data transfer
+
+
+It is an access control system that checks packets on a network boundary (powerless against insider attacks and unchecked paths). 
+It can be placed at transport or application level. 
+The main two functions are: 
+	> IP packets filtering
+	> Network Address Translation
+Is a rule-based system that define a policy based on a default deny base. 
+
+< Packet Filters > 
+
+Transport-level firewall that process each packet. 
+The data that can be decoded from the headers (and thus used for the rules):
+	_ source and destination IPs
+	_ source and destination ports
+	_ protocol type (UDP or TCP)
+
+By default, this kind of firewall is STATELESS, cannot track TCP connections. 
+Measure of performance: packets per second. 
+
+The STATEFUL variant keep track of the TCP state machine and simplify the rules, because now we only need to accept the incoming connections --> the responses will be allowed by default because they belong to the same connection. This kind of firewall is considered to be safer as it denies the outgoing connections (only allows external/internal communication if started from outside) thus preventing an internal attacker to go outside after spoofing an internal address. 
+Measure of performance: packets per second + number of simultaneous connections. 
+The attacker can exploit the limit of memory to keep track of all the connections. 
+Keeping track of the connections allows the firewall to reconstruct application-layer protocols and checking the fragmentation to avoid the teardrop attack. 
+
+< NAT over UDP attack > 
+
+Considering the high probability that at some point an internal agent will make a DNS request for an external address, the attacker can try to send a fake packet within the timeout range, but it has to guess the source port of thr machine (easy guess: the range is limited). 
+
+< The problem of FTP >
+
+The client-side port for data transfer is dynamic, and this is a problem for the rule-based system (we can't set both the address and the port to ANY). 
+To solve the problem, the firewall must inspect the content of the packets at application level (address and port are stored in the PORT command as string) and open the dedicated connections with the NAT translation.  
+
+< Application Proxies > 
+
+These systems inspect, validate and manipulate protocol application data, and thus are protocol-specific. 
+They work only if such data is not encripted (like in HTTP).
+The client has to connect to the proxy, that will then create (and control) the connection to the real service. This kind of procedure is almost never transparent to the client. 
+
+They can be used to defend both clients and servers (can avoid XSS and SQL injection).
+
+< Multi-zone Architectures > 
+
+Core idea: allow external access to the accessible servers but not  to the internal network. In order to do so, we split the network by privileges levels with firewalls on the boundaries to regulate access.
+The default zone is the semi-public zone called DMZ. It will host public servers (web, FTP, public DNS, intake SMTP) and no critical data. 
+
+< VPN >
+
+System to solve the problem of creating a trusted network transport over an untrusted channel.
+Needs a controller in the private network (VPN server). 
+The modes: 
+	_ full tunnelling: even if the packet isn't directed to the private network, it first goes there and then to the ISP. If not needed, this can be very inefficient ("traffic multiplication"), but gives full control.
+	_ split tunnelling: the traffic to the internet goes directly to the ISP. This is more efficient but gives less control. The computer may be infected when browsing the internet and then gain access to the private network via the VPN. 
+There are many different protocols to implement it: the most common one is SSH. 
+
+< TLS >
+
+Is a protocol used to secure communication: ensure confidentiality (mutual authentication) and integrity. No guarantees on data usage, as the focus is only on the transmission of information. 
+Usees asymmetric encription to exhange the intialize the conversation (no need for a secure channel) and then uses symmetric encription for the actual communication for performance reasons. 
+
+It is transparent wrt the actual encription algorithm used (robust to technical evolution). To begin the communication, the client proposes to the server a suite of algorithms in preference order, and the server selects the best possible option. 
+To grant communication in every case, every server has to implement at least the basic algorithms (minimal cipher setting)
+The complete procedure for the handshake is: 
+	Client: cipher suite + random data (d1)
+	Server: cipher selection + random data (d2)
+	Server: certificate 
+	Client: pre-master secret (pms) encrypted with server public key (+ optional: encrypted with client's private key)
+	-- computation of the shared secret from {d1, d2, pms} --
+	-- communication over an encrypted channel --
+The weak point of this handshake is that old algorithms in the minimal setting have known vulnerabilities, and (as the selection part is not encrypted) the attacker can force the use of them. 
+
+Remember that the attack can still occur because of the human factor (weak point of the system): if the user decides to accept an untrusted certificate, it violates the assumption of the digital signature and thus becomes vulnerable. 
+
+The encryption of data makes the use of application-level proxies more difficult. Basically, a proxy now has to act like a MITM between two encrypted channels. 
+
+Note that TLS is robust by design to MITM, as it exploits the digital signature system (at least) server-side. The choice of the PKI as trusted element of the system can be considered a weakness of basic HTTPS, this is why some additional protocols have been designed:
+	_ HPKP (HTTP Public Key Pinning): the browser receives a list of trustworthy certificates for the various domains and are supposed to refuse the connection if none of them is available when starting a connection. It is deprecated due to scalability issues. 
+	_ Certificate Transparency: CAs submit the metadata of every issued certificate to a (independent, replicated) log accessible to browsers. Site owners check the certificates issued for their domains. 
+	 
+< SSL Strip Attack >
+
+It can happen when websites are a mix of HTTP and HTTPS (the latter used only for the sensitive data). The attacker, acting like a MITM, will present to the user an HTTP version of the website while maintaining the connection with the SSL server. 
+The user will insert the sensitive data and unknowingly send them as plain text through the attacker's node. On the other end, the SSL server will receive the encrypted data as everything was ok. 
+To overcome this kind of attack, an additional protocol has been designed: HSTS (HTTP Strict Transport Security) forces the browser to use HTTPS instead of HTTP. It is implemented by default in every browser.
+
+< SET (Secure Electronic Transaction) > 
+
+This is a protocol designed specifically for remote transactions.
+The problems of such setting are: 
+	_ Trust between parties
+	_ Use of sensitive data
+	_ Atomicity of transaction (due to remoteness, the buyer can't get the item immediately)
+
+Uses the concept of dual signature: a signature that joins together the two pieces of a message, directed to two distinct recipients.
+We have to consider 3 agents: 
+	_ buyer
+	_ seller
+	_ payment gateway
+The dual signature procedure proceeds as follows: 
+	1) the buyer generates the info about the order (O) + the payment details (P)
+	2) compute D = hash(hash(O)+hash(P))
+	3) compute S = sign([D], buyer's private key)
+	4) compute M = sign([O, hash(P), S], merchant's public key) and send it to the merchant
+	5) compute G = sign([P, hash(O), S], gateway's public key) and send it to the gateway
+After these steps, both the merchant and the gateway can verify the integrity of the information by recomputing the dual hash. 
+The merchant will not have the payment information and the gateway will not know the details of the order.
+
+The need for a certificate for the buyer led this protocol to the failure. Nowadays, a simple redirect with a token to the website of the bank is used (PayPal).
+
+< Malware >
+
+Definitions: 
+• Malware: general term to indicate a software intentionally written to violate a security policy. 
+• Virus: code that gets injected in other files (usually executables) and thus is not a standalone program.  
+• Worm: program that exploit some vulnerability (maybe the human factor: social engineering).
+• Trojan horse: apprently benign program controlled by remote. 
+• 
+• 
