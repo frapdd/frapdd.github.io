@@ -1,3 +1,3 @@
-[Synchronization](https://frapdd.github.io/sync/)
+[Synchronization](https://frapdd.github.io/sync)
 
-[Fault tolerance](https://frapdd.github.io/fault/)
+[Fault tolerance](https://frapdd.github.io/fault)
