@@ -1,1 +1,1 @@
-[Synchronization](https://frapdd.github.io/distributed/sync/)
+[Synchronization](https://frapdd.github.io/sync/)
