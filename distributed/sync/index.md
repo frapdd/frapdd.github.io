@@ -1,3 +1,5 @@
+# Synchronization 
+
 ## 2 Logical time
 Ci interessa la relazione di causalità, ma è complicata quindi alleggeriamo definendo una relazione di "potenziale casualità". 
 Definiamo la relazione transitiva "happens before": 
