@@ -1,8 +1,5 @@
-<header>
-Synchronization
-    </header>
+title: Synchronization
 
-<main>
 ## 2 Logical time
 Ci interessa la relazione di causalità, ma è complicata quindi alleggeriamo definendo una relazione di "potenziale casualità". 
 Definiamo la relazione transitiva "happens before": 
@@ -173,4 +170,3 @@ In un sistema distribuito non c'è nessun coordinatore che possa costruire il gr
 - Un processo viene messo in attesa --> manda un messaggio PROBE a chi sta aspettando, allegando il proprio id
 - Un processo riceve un messaggio PROBE --> se non è lui stesso il mittente originale, si limita ad inoltrarlo in avanti aggiungendo il proprio id alla lista, altrimenti viene rilevato un deadlock 
 - Il processo con il più alto id all'interno del ciclo viene killato 
-</main>
