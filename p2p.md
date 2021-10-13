@@ -48,10 +48,10 @@ Problema: on ci sono bounds sull'efficienza del servizio.
 L'idea è creare un internet non centralizzato senza censure e anonimo. Quando ti connetti offri dello storage che conterrà una parte dei file della rete (criptati). Quando pubblichi un file, sai che viene distribuito sulla rete in qualche modo. Quando cerchi un file, questo viene propagato ulteriormente lungo il path (favorisce le risorse popolari), non c'è connessione diretta tra i due nodi. Un file che non viene mai cercato viene cancellato dopo un po'. 
 Oltre a propagare queries, ora anche risorse. Per gestire questo, ogni nodo mantiene informazioni limitate sulla mappa risorse-nodi e sul routing tra nodi (non c'è bisogno di flooding). 
 
-    - ricevo una query: mando una risposta se possiedo la ricerca o conosco chi la possiede
-    - ricevo la risposta a una query: memorizzo la mappa risorsa-nodo e procedo con la ricerca del nodo
-    - devo cercare un nodo: inizio a chiedere dai nodi che hanno una chiave simile a quella che sto cercando (probabilisticamente conveniente)
-    - ricevo una richiesta di routing: rispondo direttamente affermativamente o propago la richiesta. Durante questo processo aggiorno anche le mie informazioni sulla rete (mappa e routing). 
+- ricevo una query: mando una risposta se possiedo la ricerca o conosco chi la possiede
+- ricevo la risposta a una query: memorizzo la mappa risorsa-nodo e procedo con la ricerca del nodo
+- devo cercare un nodo: inizio a chiedere dai nodi che hanno una chiave simile a quella che sto cercando (probabilisticamente conveniente)
+- ricevo una richiesta di routing: rispondo direttamente affermativamente o propago la richiesta. Durante questo processo aggiorno anche le mie informazioni sulla rete (mappa e routing). 
     
 Questa struttura si sviluppa naturalmente in modo che dopo un po' certi nodi diventano più informati, e alla fine le richieste passeranno per lo più attraverso questi pochi nodi rilevanti. Le risorse si sposteranno verso l'area in cui sono più richieste. 
 Non ci sono ancora bounds sulle garanzie del servizio. 
