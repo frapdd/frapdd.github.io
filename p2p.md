@@ -1,4 +1,4 @@
-# <span style="color:white">Peer 2 Peer</span>
+# Peer 2 Peer
 
 Paradigma/stile architetturale che promuove la condivisione di risorse e servizi tramite interazioni diretti tra pari: processing, storage, network bandwidth e dati.
 Una overlay network è una rete logica di connessioni tra peer, un'astrazione sulla rete fisica in cui gli archi sono "virtual links". Alcuni protocolli cercano di tenere un legame tra prossiità fisica e logica, ma non per forza. 
