@@ -1,4 +1,6 @@
 remote_theme: pages-themes/modernist@v0.2.0
 title: Appunti
+github:
+  is_project_page: false
 plugins:
 - jekyll-remote-theme
