@@ -1,6 +1,7 @@
 # Big Data
 
 Trattiamo i sistemi distribuiti per supportare applicazioni basate su big data. 
+
 Caratteristiche dei dati trattati (4 V):
 
 - Volume: l'approccio di solito è di mantenere i dati di default (per eventuali ricerche future), questo fa esplodere le dimensioni.
