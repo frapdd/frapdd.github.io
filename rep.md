@@ -1,4 +1,5 @@
-# <span style="color:white">Replication</span>
+# Replication
+
 L'obiettivo principale di tutta questa parte è garantire consistenza tra le varie repliche dei dati limitando l'overhead di comunicazione necessaria per ottenerla e la degradazione della performance. 
 Il tutto si può riassumere con: idealmente ogni read dovrebbe ritornare il valore dell'ultima write. 
 
