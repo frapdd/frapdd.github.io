@@ -1,4 +1,4 @@
-# <span style="color:white">Fault Tolerance</span>
+# Fault Tolerance
 
 I fault si classificano in base alla frequenza: 
 - Transient: succedono una volta e poi scompaiono
