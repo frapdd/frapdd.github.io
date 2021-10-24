@@ -15,9 +15,9 @@ Con questo protocollo troviamo una condizione necessaria per la hb: A hb B --> L
 Ogni processo ha un clock (variabile scalare). 
 
 - manda un messaggio: allega come timestamp clock++
-- ricevi un messaggio: aggiorna clock = MAX(timestamp messaggio, clock)
+- ricevi un messaggio: aggiorna clock = MAX(timestamp messaggio, clock)++
 
-Col protocollo descritto si ottiene partial ordering, se aggiungiamo un prefisso al clock otteniamo ordine globale.
+Col protocollo descritto si ottiene partial ordering, se aggiungiamo un suffisso al clock otteniamo ordine globale.
 
 ### 2.2 Vector clocks
 
