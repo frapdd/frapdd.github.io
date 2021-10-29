@@ -55,9 +55,9 @@ Ad ogni richiesta viene allegato un timestamp, e poi viene mandata in broadcast.
 
 1) non possiede la risorsa richiesta + non è interessato ad averla --> manda un ack al mittente
 
-2) non possiede la risorsa richiesta + ha già mandato richiesta anche lui --> mette la richiesta in una coda locale ordinata per timestamp
+2) possiede la richiesta --> mette la richiesta in una coda di richieste ordinata per il timestamp
 
-3) possiede la richiesta --> mette la richiesta in una coda di richieste ordinata per il timestamp
+3) non possiede la risorsa richiesta + ha già mandato richiesta anche lui --> confronta il timestamp della propria richiesta con quello del messaggio preferito: se si accorge che la richiesta ricevuta ha la priorità (un timestamp minore) allora manda un ack, altrimenti mette la richiesta in una coda ordinata per timestamp
     
 Se un processo riceve gli ack da tutti, allora gli viene concesso l'accesso alla risorsa. 
 Appena dopo aver rilasciato la risorsa, il processo manda l'ack a tutti i processi nella sua coda locale. 
