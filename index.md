@@ -1,3 +1,5 @@
+[Naming](https://frapdd.github.io/naming)
+
 [Synchronization](https://frapdd.github.io/sync)
 
 [Fault Tolerance](https://frapdd.github.io/fault)
