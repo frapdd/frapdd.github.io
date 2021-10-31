@@ -1,3 +1,5 @@
+[Communication](https://frapdd.github.io/comm)
+
 [Naming](https://frapdd.github.io/naming)
 
 [Synchronization](https://frapdd.github.io/sync)
