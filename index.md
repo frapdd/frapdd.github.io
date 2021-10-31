@@ -1,3 +1,5 @@
+### Riassunti lezioni
+
 [Communication](https://frapdd.github.io/comm)
 
 [Naming](https://frapdd.github.io/naming)
@@ -13,5 +15,7 @@
 [Big Data](https://frapdd.github.io/bigdata)
 
 
-## Raccolta di temi d'esame: 
-[TDE](https://frapdd.github.io/tde)
+
+### Raccolta di temi d'esame: 
+
+[Archivio](https://frapdd.github.io/tde)
