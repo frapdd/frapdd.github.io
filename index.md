@@ -25,4 +25,6 @@
 
 [Recovery line](https://streamable.com/jrxyct)
 
-[Distributed snapshot]()
+[Distributed snapshot 1/2](https://streamable.com/aul9p5)
+
+[Distributed snapshot 2/2](https://streamable.com/4sapu5)
