@@ -16,6 +16,12 @@
 
 
 
-### Raccolta di temi d'esame: 
+### Raccolta di temi d'esame 
 
 [Archivio](https://frapdd.github.io/tde)
+
+
+### Guide esercizi
+
+[Recovery line](https://streamable.com/jrxyct)
+[Distributed snapshot]()
