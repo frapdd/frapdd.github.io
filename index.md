@@ -24,4 +24,5 @@
 ### Guide esercizi
 
 [Recovery line](https://streamable.com/jrxyct)
+
 [Distributed snapshot]()
