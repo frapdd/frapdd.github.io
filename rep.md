@@ -14,11 +14,12 @@ Il CAP theorem applicato ai sistemi distribuiti ci dice che, in presenza di fail
 
 Si tratta di sistemi in cui esiste un'entità di riferimento incaricata di garantire la consistenza di più repliche. 
 
-La versione più basic è quella di semplice backup: il leader propaga i cambiamenti alle repliche. Se le scritture avvengono in modo sincrono (cioè si aspetta un ack dalle repliche per ritornare la write) allora garantisce fault-tolerance.Le repliche sono totalmente passive, non possono gestire richieste dell'utente (no sharing dello workload).
+La versione più basic è quella di semplice backup: il leader propaga i cambiamenti alle repliche. Se le scritture avvengono in modo sincrono (cioè si aspetta un ack dalle repliche per ritornare la write) allora garantisce fault-tolerance. Le repliche sono totalmente passive, non possono gestire richieste dell'utente (no sharing dello workload).
 
 I protocolli single leader veri e propri fanno passare tutte le write attraverso il leader (come con il backup semplice) ma permettono di leggere da qualsiasi replica oltre che dal leader. A seconda dell'implementazione della propagazione della scrittura, il livello di consistenza garantito è più o meno alto. Si può variare tra:
 
 1) Sincrono: grosso overhead di comunicazione ma massima consistenza
+
 2) Asincrono: opposto del primo 
 
 Il trade off è il modello semi-sincrono: si decide di aspettare l'ack di K repliche  si decide di aspettare l'ack di K repliche.
