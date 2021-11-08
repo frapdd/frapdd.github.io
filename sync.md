@@ -14,8 +14,8 @@ Con questo protocollo troviamo una condizione necessaria per la hb: A hb B --> L
 
 Ogni processo ha un clock (variabile scalare). 
 
-- manda un messaggio: allega come timestamp clock++
-- ricevi un messaggio: aggiorna clock = MAX(timestamp messaggio, clock)++
+- manda un messaggio: allega come timestamp {clock++}
+- ricevi un messaggio: aggiorna clock = {MAX(timestamp messaggio, clock)++}
 
 Col protocollo descritto si ottiene partial ordering, se aggiungiamo un suffisso al clock otteniamo ordine globale.
 
@@ -27,9 +27,7 @@ Ogni processo mantiene un vettore di clock, uno per ogni processo attivo. In ogn
 
 - evento locale: vett[io]++
 - manda un messaggio: allega il vettore aggiornato (incrementato di uno per l'evento locale di mandare un mess)
-- ricevi un messaggio: per ogni posizione (diversa dalla mia) vett[i] = max(vett[i], timestamp[i]) e poi vett[io]++
-
----
+- ricevi un messaggio: per ogni posizione (diversa dalla mia) vett[pos] = max(vett[pos], timestamp[pos]) e poi vett[io]++
 
 ## 3 Mutual exclusion
 > Canali affidabili
@@ -73,8 +71,6 @@ _Messages per entry: 1 to infinity_
 
 _Delay before entry: 0 to n-1_
 
----
-
 ## 4 Leader election
 > Nodi distinguibili tra di loro (dotati di id)
 
@@ -105,8 +101,6 @@ Il protocollo consiste nel loop di questo algoritmo:
 - Se il processo ritrova il proprio id nella lista, allora il messaggio diventa di tipo COORD e viene ri-inoltrato attraverso l'anello
 - Ogni volta che si riceve un messaggio COORD, si considera il processo con più alto id come leader
 
----
-
 ## 5 Global state
 > Canali affidabili
 
@@ -136,7 +130,6 @@ La condizione di terminazione del sistema è: tutti i processi sono in idle + ne
 - Quando un nodo non ha più figli e termina la computazione richiede la propria rimozione dall'albero al genitore
 - Quando rimane solo la root, allora il sistema ha terminato
 
----
 ## 6 Distributed transactions
 Si definisce transazione una sequenza di operazioni protetta da proprietà ACID (Atomic, Consistent, Isolated, Durable). Queste sono le classiche transazioni flat. 
 Le transazioni "Nested" sono gruppi di mini-transazioni in cui la durabilità viene garantita solo a livello di gruppo (posso rollbackare le mini transazioni). 
