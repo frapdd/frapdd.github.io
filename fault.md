@@ -71,9 +71,7 @@ Si tratta di un requisito importante per ottenere resilienza del sistema tramite
 
 > I processi sono funzionanti
 
-> Il multicast all'interno del gruppo funziona
-
-L'ultima assunzione si può implementare con ack positivi (problema: rete sovraccarica) o negativi (mandati se manca un pacchetto, ci si accorge numerando).
+Un multicast funzionante all'interno del gruppo si può implementare con ack positivi (problema: rete sovraccarica) o negativi (mandati se manca un pacchetto, ci si accorge numerando).
 
 L'idea è che ogni nack viene spedito in multicast e quindi tutti gli altri processi ne sono al corrente. Se devono mandare anche loro un nack per la stessa cosa devono prima aspettare la scadenza di un timer di durata random che viene resettato ogni volta che si osserva un nuovo nack. 
 Si evita di mandare nack replicati ma ogni processo deve processare tutti i nack, e questo ha un costo. 
@@ -111,6 +109,7 @@ Possibili strategie:
 
 #### 3.3.1 ISIS
 > Canali FIFO affidabili
+
 > Mentre si sta processando un cambiamento di gruppo non se ne verifica un altro
 
 Implementazione nota di virtual synchrony. L'idea è che ogni processo tiene un buffer con i messaggi inviati finchè non viene ricevuto un ack (messaggio di flush) dai destinatari. 
