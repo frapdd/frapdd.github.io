@@ -84,7 +84,7 @@ La comunicazione è organizzata per gruppi di processi: ogni messaggio ha destin
 
 Può rientrare in più classificazioni tra quelle sopra, a seconda delle primitive utilizzate. 
 
- ### 3.2 Message queuing
+### 3.2 Message queuing
 
 Comunicazione point-to-point, persistent e asynchronous che segue un approccio data-centered. Ogni entità coinvolta (peer to peer) ha una coda in entrata e una in uscita. 
 
@@ -101,7 +101,7 @@ Le code sono identificate da nomi simbolici, quindi serve un sistema di lookup d
 
 Le architetture che implementano questa stategia devono eventualmente prevedere "message brokers", cioè nodi che covertono i messaggi nella comunicazione tra due processi non direttamente compatibili. 
 
-### 3.3 Publish/subrscribe
+### 3.3 Publish/subscribe
 
 Approccio event-based alla comunicazione via messaggi, transient asynchronous, multipoint. Ogni entità può pubblicare notifiche di propri eventi (come messaggi) e ricevere le notifiche degli eventi a cui è iscritta: le primitive sono solo due: publish, subscribe. Il sistema prevede dei componenti chiamati "event dispatcher" che raccolgono le iscrizioni e distribuiscono le notifiche degli eventi agli iscritti; spesso questo componente viene implementato in maniera distribuita perché non diventi il bottleneck del sistema. 
 
