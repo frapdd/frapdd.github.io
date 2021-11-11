@@ -28,3 +28,9 @@
 [Distributed snapshot 1/2](https://streamable.com/aul9p5)
 
 [Distributed snapshot 2/2](https://streamable.com/4sapu5)
+
+[Vector clocks](https://streamable.com/7ub6vd)
+
+[Key distribution tree](https://streamable.com/gc78up)
+
+[Finger table](https://streamable.com/56j3j4)
