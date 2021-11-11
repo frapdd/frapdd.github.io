@@ -33,4 +33,4 @@
 
 [Key distribution tree](https://streamable.com/gc78up)
 
-[Finger table](https://streamable.com/56j3j4)
+[Finger table](https://streamable.com/56j3j4) questo video è sbagliato nel caso l'anello non sia completo, dopo lo rifaccio
